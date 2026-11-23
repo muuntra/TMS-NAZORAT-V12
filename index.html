@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TMC nazorat tizimi (offline)</title>
+<link rel="stylesheet" href="css/app.css?v=10.5">
+<link rel="stylesheet" href="css/features.css?v=10.5">
+<link rel="stylesheet" href="css/tailwind.css?v=10.5">
+<script>window.__V="10.5"</script>
+</head>
+<body><main>
+<header class="top"><div class="brand"><span class="logo">💊</span><div><b>TMC nazorat</b><small>Ta'minot · Zakup · Mavsumiylik · Nazorat</small></div></div>
+<div class="acts"><button class="t" id="bk_sv" title="Brauzerdagi ma'lumotlarni (yetkazuvchi, jurnal, reja, kalendar, qo'lda keshlar) faylga saqlash">💾 Baza saqlash</button><label class="bl">📂 Tiklash<input type="file" id="bk_ld" accept=".json" hidden></label><button id="exp" hidden>⬇ Excel (hammasi)</button><button class="t" id="th" title="Yorug' / qorong'i mavzu">🌓</button></div></header>
+<section class="card"><div class="sec"><h3>📂 Fayllar <span class="mu" style="text-transform:none;letter-spacing:0">· hisob shu brauzerning o'zida bajariladi, fayllar chiqib ketmaydi</span></h3><div class="files">
+<label class="ft"><span class="ftt">1 · Продажа (davr bo'yicha jami)</span><input type="file" id="fs" accept=".xlsx,.xls"><em class="fn" id="fn_s">📎 Tanlash uchun bosing</em></label>
+<label class="ft"><span class="ftt">2 · Остатки ТМЦ детали</span><input type="file" id="fd" accept=".xlsx,.xls"><em class="fn" id="fn_d">📎 Tanlash uchun bosing</em></label>
+<label class="ft"><span class="ftt">3 · Peremeshenya (ixtiyoriy)</span><input type="file" id="fp" accept=".xlsx,.xls"><em class="fn" id="fn_p">📎 Tanlash uchun bosing</em></label>
+<label class="ft"><span class="ftt">4 · Sotuv tarixi, oylar (ixtiyoriy)</span><input type="file" id="fh" accept=".xlsx,.xls"><em class="fn" id="fn_h">📎 Tanlash uchun bosing</em></label>
+<label class="ft"><span class="ftt">5 · Savdo dinamikasi, so'm (ixtiyoriy)</span><input type="file" id="fm" accept=".xlsx,.xls"><em class="fn" id="fn_m">📎 Tanlash uchun bosing</em></label>
+</div></div>
+<div class="sec"><h3>⚙️ Hisob parametrlari</h3><div class="params">
+<label>Sotuv davri, kun<input type="number" id="per" value="30" min="1"></label>
+<label title="CZ, CY, CX, BZ toifali tovarda ehtiyoj keshning shu % idan kam bo'lsa, zakup 0 bo'ladi (qo'lda 1 qilish mumkin)">Min. kesh %<input type="number" id="minc" value="25" min="0" max="100"></label>
+<label title="Z toifali (tartibsiz sotiladigan) tovarda ehtiyojning kesh qoldig'i shu % dan kam bo'lsa, qo'shimcha kesh zakaz qilinmaydi. 0 = o'chirilgan (doim yuqoriga yaxlitlanadi)">Z uchun min. kesh %<input type="number" id="zmin" value="50" min="0" max="100"></label>
+<label title="Zayavka necha kunlik sotuvga hisoblanadi">Zayavka qamrovi, kun<input type="number" id="cov" value="30" min="1"></label>
+<label>Yetkazish, kun<input type="number" id="lead" value="10" min="0"></label>
+<label>Qo'shimcha zaxira, kun<input type="number" id="extra" value="0" min="0"></label>
+<details id="adv" style="flex-basis:100%"><summary style="cursor:pointer;color:var(--mu);font-size:12px">⚙ Avtomatik qoidalar (tegmasangiz ham ishlayveradi)</summary><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"><label title="Doimiy sotiladigan (X/Y, ≥10 oy) tovar filialda 0 qoldiq bo'lsa va V63 ≤ 0,7×V12 bo'lsa, talab V63 va V12 aralashmasidan olinadi">Defektura tiklash<input type="checkbox" id="defon" checked></label>
+<label title="V12 vazni: 0 = faqat V63, 1 = faqat V12">V12 vazni<input type="number" id="defw" value="0.5" step="0.05" min="0" max="1"></label>
+<label title="Z toifada filial talabini V12_filial × K_tarmoq × koeff. dan oshirmaydi">Sakrash cheklash<input type="checkbox" id="capon"></label>
+<label>Cheklash ×<input type="number" id="capm" value="3" step="0.5" min="1"></label>
+<label title="Filial talabi tarmoq talabi va filialning 12 oylik ulushi bilan yumshatiladi (orqaga sinovda xato 73,1% → 69,6%)">Tarmoq talabi<input type="checkbox" id="nett"></label>
+<label title="0 = faqat filial sotuvi, 1 = faqat tarmoq ulushi">Tarmoq vazni<input type="number" id="netw" value="0.5" step="0.05" min="0" max="1"></label>
+<label title="3-fayldagi peremeshenya provodka holati">3-fayl rejimi<select id="pmode"><option value="auto">Avto-aniqlash</option><option value="posted">1C da provodka qilingan</option><option value="draft">Qoralama</option></select></label></div></details>
+<label title="Hamma hisobda doim «Доступно» ishlatiladi («В наличии» emas)">Qoldiq = doim «Доступно»<input type="number" id="rs" value="100" disabled></label>
+<label>Peremeshenya kelishi, kun<input type="number" id="pd" value="10" min="0"></label>
+<label>XYZ: X ≤ CV<input type="number" id="xt" value="0.5" step="0.1" min="0"></label>
+<label>XYZ: Y ≤ CV<input type="number" id="yt" value="1" step="0.1" min="0"></label>
+<label class="sw"><input type="checkbox" id="pc" checked> Peremeshenyani hisobga olish</label>
+<label class="sw"><input type="checkbox" id="sr"> Tizim tavsiyasini ko'rsatish</label>
+</div><div id="msg"></div><div class="mu" id="st" style="margin-top:8px">Avval 1 va 2-faylni tanlang: shundan keyin hamma bo'lim hisoblanadi.</div></div></section>
+<div id="tabs"></div>
+<div id="bar" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px"><input type="text" id="flt" placeholder="Qidirish..." style="width:220px"><span id="chips" style="display:flex;gap:4px"></span><button class="t" id="tg">▲ Boshqaruv</button></div>
+<div id="out"></div>
+</main>
+<script src="js/vendor/xlsx.full.min.js?v=10.5"></script>
+<script src="js/app.js?v=10.5"></script>
+<script src="js/features/zayavka-grid.js?v=10.5"></script>
+<script src="js/features/upload.js?v=10.5"></script>
+<script src="js/features/zayavka-hover.js?v=10.5"></script>
+<script src="js/features/page-title.js?v=10.5"></script>
+<script src="js/features/buyurtma.js?v=10.5"></script>
+<script src="js/features/reja.js?v=10.5"></script>
+<script src="js/features/tovar-tahlili.js?v=10.5"></script>
+<script src="js/features/natsenka.js?v=10.5"></script>
+<script src="js/features/filecache.js?v=10.5"></script>
+<script src="js/config.js?v=10.5"></script>
+<script src="js/vendor/supabase.min.js?v=10.5"></script>
+<script src="js/features/cloud.js?v=10.5"></script>
+<script src="js/lazy-exceljs.js?v=10.5"></script>
+</body></html>

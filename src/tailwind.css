@@ -1,0 +1,7 @@
+/* Tailwind v4: faqat theme va utilities. Preflight (reset) ATAYIN qo'shilmagan,
+   chunki u mavjud dizaynni buzadi. Yangi bo'limlarda Tailwind klasslari ishlatiladi. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@source "../index.html";
+@source "../js";

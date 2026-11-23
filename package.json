@@ -1,0 +1,16 @@
+{
+  "name": "tmc-nazorat",
+  "version": "10.0.0",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i src/tailwind.css -o css/tailwind.css --minify",
+    "build": "npm run build:css && node tools/build.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}
