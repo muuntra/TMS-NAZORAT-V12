@@ -135,3 +135,83 @@ body[data-tab$="natsenka"] .mc>.card,body[data-tab$="Tovar tahlili"] .mc>.card{d
  body .acts{flex:1 1 560px!important;flex-wrap:wrap!important;justify-content:flex-end;gap:5px!important}
  body .acts button,body .acts .bl{padding:3px 8px!important}
 }
+
+/* =====================================================================
+   v11 · POLISH qatlami (mikro-interaksiyalar, klaviatura, loading bar)
+   ===================================================================== */
+
+/* --- top loading bar --- */
+#ldb{position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;pointer-events:none;opacity:0;transition:opacity .2s}
+#ldb.run{opacity:1}
+#ldb i{display:block;height:100%;width:0;border-radius:0 3px 3px 0;background:linear-gradient(90deg,var(--ac),var(--ac3));box-shadow:0 0 12px var(--ac);transition:width .3s cubic-bezier(.2,.8,.2,1)}
+
+/* --- theme transition smoothing --- */
+:root.thx *{transition:background-color .35s ease,color .35s ease,border-color .35s ease,box-shadow .35s ease!important}
+
+/* --- theme toggle icon --- */
+#th{display:inline-flex;align-items:center;justify-content:center}
+#th .ico{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* --- keyboard shortcuts overlay --- */
+.sc-ov{position:fixed;inset:0;z-index:9998;background:rgba(6,8,16,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;animation:fade .2s ease}
+.sc-cd{background:var(--gl),var(--card);border:1px solid var(--bd);border-radius:20px;padding:24px 28px;width:min(440px,92vw);box-shadow:var(--sh2)}
+.sc-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.sc-hd b{font-size:18px;font-weight:800;letter-spacing:-.025em}
+.sc-hd .t{padding:4px 10px;font-size:13px}
+.sc-list{display:grid;gap:8px}
+.sc-row{display:flex;align-items:center;gap:14px;padding:6px 0;border-bottom:1px solid color-mix(in srgb,var(--bd) 60%,transparent)}
+.sc-row:last-child{border-bottom:0}
+.sc-key{display:inline-flex;align-items:center;gap:4px;flex:none;min-width:72px}
+.sc-key kbd{display:inline-block;padding:3px 9px;border-radius:7px;background:var(--bg2);border:1px solid var(--bd);font:600 12px/1.3 ui-monospace,"SF Mono",Menlo,monospace;color:var(--tx);box-shadow:var(--hi),0 1px 2px rgba(0,0,0,.06)}
+.sc-plus{color:var(--mu);font-size:11px}
+.sc-desc{font-size:13px;color:var(--mu);letter-spacing:-.005em}
+.sc-ft{margin-top:16px;font-size:11px;color:var(--mu);text-align:center}
+
+/* --- stacked toast notifications --- */
+.tmc-ts{position:fixed;left:50%;bottom:26px;z-index:9997;transform:translateX(-50%);display:flex;flex-direction:column-reverse;gap:8px;pointer-events:none}
+.tmc-t{display:flex;align-items:center;gap:10px;padding:11px 18px;border-radius:14px;background:rgba(14,18,38,.95);color:#fff;font-size:13px;font-weight:500;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transform:translateY(14px);transition:opacity .25s,transform .25s;pointer-events:auto}
+.tmc-t.show{opacity:1;transform:translateY(0)}
+.tmc-t.ok{background:rgba(14,120,60,.95);border-color:rgba(34,197,94,.3)}
+.tmc-t.warn{background:rgba(140,100,8,.95);border-color:rgba(245,158,11,.3)}
+.tmc-t.err{background:rgba(140,28,24,.95);border-color:rgba(239,68,68,.3)}
+.tmc-ic{font-size:15px;flex:none}
+
+/* --- empty state message --- */
+.es-msg{display:flex;align-items:center;gap:8px;padding:20px 16px;color:var(--mu);font-size:13px;border:1px dashed var(--bd);border-radius:14px;margin:8px 0;background:var(--bg2)}
+.es-msg .ico{width:20px;height:20px;fill:none;stroke:var(--mu);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.6}
+
+/* --- ripple on buttons --- */
+button:not(.t):not(.seg button):not(#tabs button):not(.sw input){position:relative;overflow:hidden}
+.rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:translate(-50%,-50%) scale(0);animation:rp .55s ease-out forwards;pointer-events:none}
+@keyframes rp{to{transform:translate(-50%,-50%) scale(4);opacity:0}}
+
+/* --- scroll-to-top button --- */
+#sttb{position:fixed;right:20px;bottom:20px;z-index:90;width:44px;height:44px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transform:translateY(10px) scale(.85);transition:opacity .25s,transform .25s;box-shadow:var(--sh2)}
+#sttb.vis{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+#sttb .ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* --- refined table row focus (accessibility) --- */
+#out table tbody tr:focus-within{outline:none}
+#out table tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--ac)}
+
+/* --- tab badge: subtle pulse for active --- */
+#tabs button.on .ico{transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+#tabs button.on:active .ico{transform:scale(.85)}
+
+/* --- input number: hide spinner for cleaner look --- */
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+
+/* --- card hover: subtle lift on interactive cards --- */
+.cc:hover,.card:hover{border-color:color-mix(in srgb,var(--ac) 30%,var(--bd))}
+
+/* --- mobile: scroll-to-top reposition to avoid overlap --- */
+@media (max-width:900px){
+ #sttb{right:14px;bottom:14px;width:40px;height:40px}
+ .sc-cd{padding:18px 20px}
+ .sc-row{gap:10px}.sc-key{min-width:60px}
+}
+@media (prefers-reduced-motion:reduce){
+ #ldb,.rp,#sttb,.tmc-t,.sc-ov{animation:none!important;transition:none!important}
+ :root.thx *{transition:none!important}
+}
