@@ -446,9 +446,10 @@ function run0(){
  supMaps();const RS=1,USE=$('#pc').checked,SR=$('#sr').checked,PD=Math.max(0,+$('#pd').value||0),P=+$('#per').value||30,COV=+$('#cov').value||30,MINC=($('#minc').value===''?25:+$('#minc').value)/100,ZM=(v=>isNaN(v)?0:Math.min(1,Math.max(0,v)))(parseFloat(($('#zmin')||{}).value)/100),LD=(+$('#lead').value||0)+(+$('#extra').value||0),coef=(COV+LD)/P;window.__ZP={P,COV,LD,coef,USE};
  const today=new Date();today.setHours(0,0,0,0);
  // sales
- const h=raw.s.findIndex(r=>r&&r.some(c=>/Самарканд/.test(String(c||''))));
- if(h<0){$('#msg').textContent='Продажа faylida ombor ustunlari topilmadi.';return}
- const hr=raw.s[h].map(c=>String(c||'').trim()),ci={};WS.forEach(w=>ci[w]=hr.findIndex(c=>c.replace(/^Склад\s+/,'')===w));
+ const whName=c=>String(c==null?'':c).trim().replace(/^Склад\s+/i,'').trim();
+ const h=raw.s.findIndex(r=>r&&r.some(c=>WS.includes(whName(c))));
+ if(h<0){$('#msg').textContent='Продажа faylida tanilgan filial ustuni topilmadi (Андижан, Карши, Наманган, Самарканд, Ташкент, Фергана yoki Хорезм).';return}
+ const hr=raw.s[h].map(whName),ci={};WS.forEach(w=>ci[w]=hr.findIndex(c=>c===w));
  const hdI=raw.s.slice(0,h+3).find(r=>r&&r.includes('ИД ТМЦ'))||[],cI=hdI.indexOf('ИД ТМЦ'),cM=cI>=0?hdI.indexOf('Производитель'):1;
  const ID2N={},ALIAS={},I={},get=n=>I[n]||(I[n]={name:n,id:'',mfr:'',rv:{},st:{},sd:{},tw:{},sales:{},intake:0,pr:[],co:[],pr2:[],co2:[],cs:0,val:0});
  for(let i=h+1;i<raw.s.length;i++){const r=raw.s[i];if(!r)continue;const n=String(r[0]||'').trim();if(!n||n==='ТМЦ'||/^ИТОГО/i.test(n))continue;const it=get(n),idv=cI>=0?String(r[cI]==null?'':r[cI]).trim():'';if(idv){it.id=idv;ID2N[idv]=n}it.mfr=it.mfr||(r[cM]||'');WS.forEach(w=>it.sales[w]=(it.sales[w]||0)+(+r[ci[w]]||0))}
