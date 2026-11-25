@@ -1,19 +1,21 @@
 <!doctype html>
 <html lang="uz"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TMC nazorat tizimi (offline)</title>
-<link rel="stylesheet" href="css/app.css?v=10.5">
-<link rel="stylesheet" href="css/features.css?v=10.5">
-<link rel="stylesheet" href="css/tailwind.css?v=10.5">
+<title>TMC Nazorat — ta'minot va xarid boshqaruvi</title>
+<meta name="description" content="TMC ta'minoti, xarid rejalari, zaxiralar va nazoratni brauzerda xavfsiz boshqaring.">
+<meta name="theme-color" content="#f2f4fb">
+<link rel="stylesheet" href="css/app.css?v=10.6">
+<link rel="stylesheet" href="css/features.css?v=10.6">
+<link rel="stylesheet" href="css/tailwind.css?v=10.6">
 <script>window.__V="10.5"</script>
   <meta property="og:image" content="https://bolt.new/static/og_default.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body><main>
-<header class="top"><div class="brand"><span class="logo">💊</span><div><b>TMC nazorat</b><small>Ta'minot · Zakup · Mavsumiylik · Nazorat</small></div></div>
-<div class="acts"><button class="t" id="bk_sv" title="Brauzerdagi ma'lumotlarni (yetkazuvchi, jurnal, reja, kalendar, qo'lda keshlar) faylga saqlash">💾 Baza saqlash</button><label class="bl">📂 Tiklash<input type="file" id="bk_ld" accept=".json" hidden></label><button id="exp" hidden>⬇ Excel (hammasi)</button><button class="t" id="th" title="Yorug' / qorong'i mavzu">🌓</button></div></header>
-<section class="card"><div class="sec"><h3>📂 Fayllar <span class="mu" style="text-transform:none;letter-spacing:0">· hisob shu brauzerning o'zida bajariladi, fayllar chiqib ketmaydi</span></h3><div class="files">
+<header class="top"><div class="brand"><span class="logo" aria-hidden="true"><svg class="brand-mark" viewBox="0 0 24 24"><path d="M7.7 5.5h8.6a4.3 4.3 0 0 1 0 8.6H7.7a4.3 4.3 0 0 1 0-8.6Z"/><path d="M12 5.5v8.6M7 18.5h10"/></svg></span><div><b>TMC nazorat</b><small>Ta'minot · Zakup · Mavsumiylik · Nazorat</small></div></div>
+<div class="acts"><button class="t" id="bk_sv" title="Brauzerdagi ma'lumotlarni (yetkazuvchi, jurnal, reja, kalendar, qo'lda keshlar) faylga saqlash">💾 Baza saqlash</button><label class="bl">📂 Tiklash<input type="file" id="bk_ld" accept=".json" hidden></label><button id="exp" hidden>⬇ Excel (hammasi)</button><button class="t" id="th" type="button" title="Yorug' / qorong'i mavzu" aria-label="Rang mavzusini almashtirish" aria-pressed="false" aria-keyshortcuts="T">🌓</button></div></header>
+<section class="card" id="workspace-controls"><div class="sec"><h3>📂 Fayllar <span class="mu" style="text-transform:none;letter-spacing:0">· hisob shu brauzerning o'zida bajariladi, fayllar chiqib ketmaydi</span></h3><div class="files">
 <label class="ft"><span class="ftt">1 · Продажа (davr bo'yicha jami)</span><input type="file" id="fs" accept=".xlsx,.xls"><em class="fn" id="fn_s">📎 Tanlash uchun bosing</em></label>
 <label class="ft"><span class="ftt">2 · Остатки ТМЦ детали</span><input type="file" id="fd" accept=".xlsx,.xls"><em class="fn" id="fn_d">📎 Tanlash uchun bosing</em></label>
 <label class="ft"><span class="ftt">3 · Peremeshenya (ixtiyoriy)</span><input type="file" id="fp" accept=".xlsx,.xls"><em class="fn" id="fn_p">📎 Tanlash uchun bosing</em></label>
@@ -40,24 +42,30 @@
 <label>XYZ: Y ≤ CV<input type="number" id="yt" value="1" step="0.1" min="0"></label>
 <label class="sw"><input type="checkbox" id="pc" checked> Peremeshenyani hisobga olish</label>
 <label class="sw"><input type="checkbox" id="sr"> Tizim tavsiyasini ko'rsatish</label>
-</div><div id="msg"></div><div class="mu" id="st" style="margin-top:8px">Avval 1 va 2-faylni tanlang: shundan keyin hamma bo'lim hisoblanadi.</div></div></section>
-<div id="tabs"></div>
-<div id="bar" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px"><input type="text" id="flt" placeholder="Qidirish..." style="width:220px"><span id="chips" style="display:flex;gap:4px"></span><button class="t" id="tg">▲ Boshqaruv</button></div>
+</div><div id="msg" role="alert" aria-live="assertive"></div><div class="mu" id="st" role="status" aria-live="polite" style="margin-top:8px">Avval 1 va 2-faylni tanlang: shundan keyin hamma bo'lim hisoblanadi.</div></div></section>
+<div id="tabs" role="navigation" aria-label="Bo'limlar"></div>
+<div id="bar" role="search" aria-label="Bo'lim ichidan qidirish">
+<label class="search-control" for="flt"><svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" id="flt" placeholder="Joriy bo'limdan qidirish..." autocomplete="off" spellcheck="false" aria-label="Joriy bo'limdan qidirish" aria-controls="out" aria-keyshortcuts="Slash Control+K Meta+K"><kbd aria-hidden="true">/</kbd></label>
+<button class="t" id="flt-clear" type="button" disabled aria-label="Qidiruv va filtrlarni tozalash" title="Qidiruv va tasnif filtrlarini tozalash"><svg class="search-clear-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg><span>Tozalash</span></button>
+<output id="flt-count" class="filter-count" aria-live="polite" aria-atomic="true"></output>
+<div id="chips" role="group" aria-label="ABC va XYZ bo'yicha tezkor filtr"></div>
+<button class="t" id="tg" type="button" aria-controls="workspace-controls" aria-expanded="true">▲ Boshqaruv</button></div>
 <div id="out"></div>
 </main>
-<script src="js/vendor/xlsx.full.min.js?v=10.5"></script>
-<script src="js/app.js?v=10.5"></script>
-<script src="js/features/zayavka-grid.js?v=10.5"></script>
-<script src="js/features/upload.js?v=10.5"></script>
-<script src="js/features/zayavka-hover.js?v=10.5"></script>
-<script src="js/features/page-title.js?v=10.5"></script>
-<script src="js/features/buyurtma.js?v=10.5"></script>
-<script src="js/features/reja.js?v=10.5"></script>
-<script src="js/features/tovar-tahlili.js?v=10.5"></script>
-<script src="js/features/natsenka.js?v=10.5"></script>
-<script src="js/features/filecache.js?v=10.5"></script>
-<script src="js/config.js?v=10.5"></script>
-<script src="js/vendor/supabase.min.js?v=10.5"></script>
-<script src="js/features/cloud.js?v=10.5"></script>
-<script src="js/lazy-exceljs.js?v=10.5"></script>
+<script src="js/vendor/xlsx.full.min.js?v=10.6"></script>
+<script src="js/app.js?v=10.6"></script>
+<script src="js/features/zayavka-grid.js?v=10.6"></script>
+<script src="js/features/upload.js?v=10.6"></script>
+<script src="js/features/zayavka-hover.js?v=10.6"></script>
+<script src="js/features/page-title.js?v=10.6"></script>
+<script src="js/features/buyurtma.js?v=10.6"></script>
+<script src="js/features/reja.js?v=10.6"></script>
+<script src="js/features/tovar-tahlili.js?v=10.6"></script>
+<script src="js/features/natsenka.js?v=10.6"></script>
+<script src="js/features/filecache.js?v=10.6"></script>
+<script src="js/config.js?v=10.6"></script>
+<script src="js/vendor/supabase.min.js?v=10.6"></script>
+<script src="js/features/cloud.js?v=10.6"></script>
+<script src="js/lazy-exceljs.js?v=10.6"></script>
+<script src="js/features/polish.js?v=10.6"></script>
 </body></html>
