@@ -1,0 +1,18 @@
+/* Final compatibility layer: neutralize legacy utility gradients and enforce shared tokens. */
+:root { --gl: none; --hi: none; --sh2: 0 12px 36px rgba(15, 23, 42, .18); }
+:root[data-theme="dark"] { --sh2: 0 16px 42px rgba(0, 0, 0, .45); }
+body::before, .sb2::before, .sb2::after, .logo::after { display: none !important; content: none !important; }
+*, *::before, *::after { background-image: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+#out svg linearGradient, #out svg radialGradient { display: none; }
+#out svg stop { stop-color: var(--ac) !important; }
+#out svg [fill^="url("] { fill: var(--ac) !important; }
+#out svg [stroke="#6366f1"], #out svg [stroke="#7a5cf5"], #out svg [stroke="#8b6cff"], #out svg [stroke="#7c3aed"], #out svg [stroke="#a855f7"] { stroke: var(--ac) !important; }
+#out svg [fill="#6366f1"], #out svg [fill="#7a5cf5"], #out svg [fill="#8b6cff"], #out svg [fill="#7c3aed"], #out svg [fill="#a855f7"] { fill: var(--ac) !important; }
+.rng { background-color: var(--hd) !important; }
+.actions-menu summary, .data-hub-summary button, .mobile-nav-toggle { box-shadow: none !important; }
+#upb, #chips button.on, .seg button.on { background-color: var(--ac) !important; color: var(--accent-ink) !important; }
+:root[data-theme="dark"] button:hover:not(.t), :root[data-theme="dark"] #upb:hover { color: #FFFFFF !important; }
+#tabs button.on { background-color: var(--active) !important; color: var(--active-text) !important; background-image: none !important; }
+#workspace-controls, .data-hub-summary, .top, .sb2, .card, .cc, .sc, .tvc, .w, .search-control, .action-items { background-color: var(--card) !important; }
+input, select, textarea, th, .ft, .hm div, .pg, .seg { background-color: var(--hd); }
+#nav-backdrop { transition: opacity .18s ease; }
