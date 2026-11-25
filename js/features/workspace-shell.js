@@ -87,6 +87,9 @@
   }
 
   summaryButton.addEventListener('click', () => setHubOpen(true));
+  content.addEventListener('click', (event) => {
+    if (event.target.closest('[data-open-hub]')) setHubOpen(true);
+  });
   if (upload) {
     upload.onclick = null;
     upload.addEventListener('click', (event) => {
